@@ -300,3 +300,135 @@ for i, v in enumerate(values):
 plt.grid(True)
 plt.show()
 # ============================================================================================
+
+# ======================================== CELL - 20 =========================================
+import math
+)
+def haversine_km(lat1, lon1, lat2, lon2):
+    R    = 6371   
+    dlat = math.radians(lat2 - lat1)
+    dlon = math.radians(lon2 - lon1)
+    a    = (math.sin(dlat/2)**2 +
+            math.cos(math.radians(lat1)) *
+            math.cos(math.radians(lat2)) *
+            math.sin(dlon/2)**2)
+    return R * 2 * math.asin(math.sqrt(a))
+
+
+predictions = model.predict(X_test)
+pred_lats = predictions[:, 0] * 180 - 90
+pred_lons = predictions[:, 1] * 360 - 180
+
+actual_lats = y_orig_test[:, 0]
+actual_lons  = y_orig_test[:, 1]
+
+print("\n" + "="*75)
+print(f"{'#':<5} {'Actual Lat':>12} {'Actual Lon':>12} {'Pred Lat':>12} {'Pred Lon':>12} {'Error(km)':>12}")
+print("="*75)
+
+total_error = 0
+for i in range(len(X_test)):
+    a_lat = actual_lats[i]
+    a_lon = actual_lons[i]
+    p_lat = pred_lats[i]
+    p_lon = pred_lons[i]
+    error = haversine_km(a_lat, a_lon, p_lat, p_lon)
+    total_error += error
+    print(f"{i+1:<5} {a_lat:>12.4f} {a_lon:>12.4f} {p_lat:>12.4f} {p_lon:>12.4f} {error:>12.1f}")
+
+avg_error = total_error / len(X_test)
+print("="*75)
+print(f"{'Average Error (km)':<50} {avg_error:>12.1f}")
+print("="*75)
+
+num_samples = 8
+fig, axes   = plt.subplots(2, 4, figsize=(20, 10))
+axes        = axes.flatten()
+
+for i in range(num_samples):
+    img = (X_test[i] * 255).astype(np.uint8)  
+
+    a_lat = actual_lats[i]
+    a_lon  = actual_lons[i]
+    p_lat  = pred_lats[i]
+    p_lon  = pred_lons[i]
+    error  = haversine_km(a_lat, a_lon, p_lat, p_lon)
+
+    axes[i].imshow(img)
+    axes[i].axis('off')
+    axes[i].set_title(
+        f"Sample {i+1}\n"
+        f"✅ Actual  → Lat: {a_lat:.2f}, Lon: {a_lon:.2f}\n"
+        f"🔴 Predicted → Lat: {p_lat:.2f}, Lon: {p_lon:.2f}\n"
+        f"📏 Error: {error:.1f} km",
+        fontsize=9,
+        loc='center'
+    )
+
+plt.suptitle("Actual vs Predicted GPS Coordinates — GeoVision",
+             fontsize=14, fontweight='bold', y=1.01)
+plt.tight_layout()
+plt.savefig('actual_vs_predicted_samples.png', bbox_inches='tight', dpi=150)
+plt.show()
+
+fig, axes = plt.subplots(1, 2, figsize=(14, 6))
+
+# --- Latitude scatter ---
+axes[0].scatter(actual_lats, pred_lats, alpha=0.5, color='steelblue', s=15)
+axes[0].plot(
+    [actual_lats.min(), actual_lats.max()],
+    [actual_lats.min(), actual_lats.max()],
+    'r--', linewidth=2, label='Perfect Prediction'
+)
+axes[0].set_xlabel('Actual Latitude',    fontsize=12)
+axes[0].set_ylabel('Predicted Latitude', fontsize=12)
+axes[0].set_title('Latitude — Actual vs Predicted', fontsize=13)
+axes[0].legend()
+axes[0].grid(True)
+
+# --- Longitude scatter ---
+axes[1].scatter(actual_lons, pred_lons, alpha=0.5, color='darkorange', s=15)
+axes[1].plot(
+    [actual_lons.min(), actual_lons.max()],
+    [actual_lons.min(), actual_lons.max()],
+    'r--', linewidth=2, label='Perfect Prediction'
+)
+axes[1].set_xlabel('Actual Longitude',    fontsize=12)
+axes[1].set_ylabel('Predicted Longitude', fontsize=12)
+axes[1].set_title('Longitude — Actual vs Predicted', fontsize=13)
+axes[1].legend()
+axes[1].grid(True)
+
+plt.suptitle('Actual vs Predicted Coordinates — Scatter Plot',
+             fontsize=14, fontweight='bold')
+plt.tight_layout()
+plt.savefig('scatter_actual_vs_predicted.png', bbox_inches='tight', dpi=150)
+plt.show()
+
+fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+axes[0].plot(history.history['loss'],     label='Train Loss')
+axes[0].plot(history.history['val_loss'], label='Val Loss')
+axes[0].set_title('Loss vs Validation Loss')
+axes[0].set_xlabel('Epoch')
+axes[0].set_ylabel('MSE Loss')
+axes[0].legend()
+axes[0].grid(True)
+
+axes[1].plot(history.history['mae'],     label='Train MAE')
+axes[1].plot(history.history['val_mae'], label='Val MAE')
+axes[1].set_title('MAE vs Validation MAE')
+axes[1].set_xlabel('Epoch')
+axes[1].set_ylabel('MAE')
+axes[1].legend()
+axes[1].grid(True)
+
+plt.tight_layout()
+plt.savefig('training_curves.png', bbox_inches='tight', dpi=150)
+plt.show()
+
+print("\n✅ Done! Files saved:")
+print("   → actual_vs_predicted_samples.png")
+print("   → scatter_actual_vs_predicted.png")
+print("   → training_curves.png")
+# ============================================================================================
