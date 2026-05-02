@@ -1,0 +1,166 @@
+# GeoVision - Image-Based Geo-Location Predictor
+# Install all dependencies using:
+# pip install -r requirements.txt
+ 
+# Deep Learning
+tensorflow==2.15.0
+keras==2.15.0
+ 
+# Image Processing
+opencv-python==4.9.0.80
+ 
+# Data Handling
+numpy==1.26.4
+msgpack==1.0.8
+ 
+# Visualization
+matplotlib==3.8.3
+ 
+# Machine Learning Utilities
+scikit-learn==1.4.1.post1
+ 
+# Notebook Support (for running .ipynb files locally)
+jupyter==1.0.0
+notebook==7.1.2
+=========================================================================================================
+
+Here a detailed description of every library used in My project:
+
+Libraries & Their Role in GeoVision
+
+1. TensorFlow & Keras
+What it is:
+TensorFlow is an open-source deep learning framework developed by Google. Keras is the high-level API built on top of TensorFlow that makes building neural networks simple and readable.
+
+Why I used it:
+It is the backbone of your entire project. I used it to:
+- Build the AlexNet-inspired CNN layer by layer
+- Compile the model with `Adam` optimizer and `MSE` loss
+- Train the model using `model.fit()`
+- Add callbacks like `EarlyStopping` and `ReduceLROnPlateau`
+
+My code example:
+```python
+from tensorflow.keras.layers import Conv2D, Dense, Dropout
+from tensorflow.keras.models import Sequential
+model = Sequential()
+model.add(Conv2D(96, kernel_size=(11,11), strides=4, activation='relu'))
+```
+
+2. OpenCV (`cv2`)
+What it is:
+OpenCV (Open Source Computer Vision Library) is the worlds most popular image processing library, originally developed by Intel.
+
+Why I used it:
+Every single image in my project passes through OpenCV. I used it to:
+- Decode raw image bytes from `.msg` files into pixel arrays
+- Convert BGR color format to RGB for correct display
+- Resize all images to a uniform `128×128` size for the model
+
+My code example:
+```python
+image = cv2.imdecode(image_array, cv2.IMREAD_COLOR)
+image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+image = cv2.resize(image, (128, 128))
+```
+
+3. NumPy
+What it is:
+NumPy (Numerical Python) is the fundamental library for numerical computing in Python. Every ML/DL project in Python depends on it under the hood.
+
+Why I used it:
+I used it to:
+- Convert raw image bytes into arrays the model can read
+- Stack all images into one big array `X` of shape `(1001, 128, 128, 3)`
+- Normalize coordinate targets `y` using array math
+- Add a batch dimension to single images before prediction
+
+My code example:
+```python
+image_array = np.frombuffer(image_bytes, np.uint8)
+X = np.array(images, dtype='float32')
+y[:, 0] = (y[:, 0] + 90) / 180   # normalize latitude
+img_input = np.expand_dims(img_normalized, axis=0)
+```
+
+4. MessagePack (`msgpack`)
+What it is:
+MessagePack is a fast binary serialization format — like JSON but much smaller and faster. It is used to store large datasets efficiently.
+
+Why I used it:
+My entire dataset is stored in `.msg` shard files. Without msgpack I cannot open or read a single image from the dataset. I used it to:
+- Open and unpack each `.msg` shard file
+- Stream through records one by one without loading everything into memory
+- Extract the `image`, `latitude`, and `longitude` fields from each record
+
+My code example:
+```python
+with open(file_path, "rb") as f:
+    unpacker = msgpack.Unpacker(f, raw=False)
+    for item in unpacker:
+        image_bytes = item['image']
+        lat = item['latitude']
+        lon = item['longitude']
+```
+
+5. Matplotlib
+What it is:
+Matplotlib is Python most widely used data visualization library. It can produce publication-quality plots, charts, and image displays.
+
+Why I used it:
+I used it in three different ways across my project:
+- Display sample images from the dataset during exploration
+- Plot training curves — Loss vs Validation Loss and MAE vs Validation MAE
+- Visualize predictions — show the test image with predicted lat/lon as title
+- Bar chart of predicted coordinate values
+
+My code example:
+```python
+plt.plot(history1.history['loss'], label='Loss')
+plt.plot(history1.history['val_loss'], label='Validation Loss')
+plt.title('Loss v/s Validation Loss')
+plt.legend()
+plt.show()
+```
+
+6. Scikit-learn
+What it is:
+Scikit-learn is Pythons go-to machine learning library built on NumPy. It provides hundreds of ML algorithms and utility tools.
+
+Why I used it:
+I used only one function from it — but a very important one:
+- `train_test_split()` — splits my 1001 images into 80% training (800 images) and 20% testing (200 images) randomly but reproducibly using `random_state=42`
+
+My code example:
+```python
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42
+)
+```
+
+7. Jupyter / Notebook
+What it is:
+Jupyter Notebook is an interactive coding environment that lets you mix code, outputs, visualizations, and text in one `.ipynb` file. It is the standard tool for data science and ML experiments.
+
+Why I used it:
+My entire project was built and run as a Kaggle notebook (which runs on Jupyter under the hood). It allowed me to:
+- Run code cell by cell and see outputs immediately
+- Display images and plots inline
+- Write markdown explanations between code blocks
+- Share the full experiment with outputs intact
+
+Quick Summary Table
+
+|    Library     |      Developer      |     Primary Role in Your Project    |
+|----------------|---------------------|-------------------------------------|
+| `TensorFlow`   | Google              | Build, compile & train the CNN      |
+| `Keras`        | Google (part of TF) | High-level layer & model API        |
+| `OpenCV`       | Intel / community   | Image decode, resize, color convert |
+| `NumPy`        | Community           | Array math & data preparation       |
+| `MessagePack`  | Community           | Read dataset `.msg` shard files     |
+| `Matplotlib`   | Community           | Plots, image display, charts        |
+| `Scikit-learn` | Community           | Train/test split                    |
+| `Jupyter`      | Project Jupyter     | Interactive notebook environment    |
