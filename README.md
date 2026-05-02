@@ -30,10 +30,10 @@ This project draws direct inspiration from 'AlexNet (Krizhevsky et al., 2012)' �
 | Regularization    | Dropout(0.5)                  | ✅ Identical                            |
 | Normalization     | Local Response Norm (LRN)     | BatchNormalization (modern upgrade)      |
 | Fully Connected   | `4096 → 4096 → 1000`          | `512 → 256 → 2` (adapted for regression) |
-| Output Activation | Softmax (classification)      | Sigmoid (regression to [0,1])        |
+| Output Activation | Softmax (classification)      | Sigmoid (regression to [0,1])            |
 
 **Key Adaptation**
-AlexNet was built for 1000-class image classification**. GeoVision adapts it for coordinate regressio* by:
+AlexNet was built for 1000-class image classification. GeoVision adapts it for coordinate regression by:
 - Replacing `softmax` with `sigmoid` in the output layer
 - Outputting only 2 neurons (lat, lon) instead of 1000
 - Normalizing coordinates to `[0, 1]` range to match sigmoid output
@@ -160,9 +160,9 @@ Val MAE ≈ 0.14 on normalized scale
 → Longitude error ≈ 0.14 × 360° ≈ 50°  (~5,500 km at equator)
 
 **Observations**
-- The model learns quickly — val_loss drops from **0.199 → 0.037** in just 4 epochs
-- Validation loss **plateaus around 0.036–0.037** — a sign that more data is needed, not a bigger model
-- Training loss keeps decreasing while val_loss plateaus — mild **overfitting** due to small dataset (1001 images)
+- The model learns quickly — val_loss drops from 0.199 → 0.037 in just 4 epochs
+- Validation loss plateaus around 0.036 – 0.037 — a sign that more data is needed, not a bigger model
+- Training loss keeps decreasing while val_loss plateaus — mild overfitting due to small dataset (1001 images)
 - The LR scheduler fired twice, confirming the model got stuck in a flat region
 
 **Future Improvements**
