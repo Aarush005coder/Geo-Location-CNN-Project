@@ -150,9 +150,9 @@ ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3)
 |-------|------------|----------|-----------|---------|
 | 1     | 0.0587     | 0.1993   | 0.1900    | 0.3965  |
 | 3     | 0.0372     | 0.0407   | 0.1455    | 0.1476  |
-| 4     | 0.0352     | 0.0377   | 0.1413    | 0.1376 |
-| 9     | 0.0294     | 0.0367   | 0.1300    | 0.1482 |
-| 13    | 0.0265     | 0.0368   | 0.1233    | 0.1410 |
+| 4     | 0.0352     | 0.0377   | 0.1413    | 0.1376  |
+| 9     | 0.0294     | 0.0367   | 0.1300    | 0.1482  |
+| 13    | 0.0265     | 0.0368   | 0.1233    | 0.1410  |
 
 **What the Numbers Mean**
 Val MAE ≈ 0.14 on normalized scale
@@ -202,6 +202,19 @@ GeoVision/
 └── models/                  # Saved model weights (optional)
     └── geovision_model.h5
 ```
+
+**Tech Stack**
+|                                                    Tool                                                  |             Purpose            |
+|----------------------------------------------------------------------------------------------------------|--------------------------------|
+| ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)             | Core language                  |
+| ![TensorFlow](https://img.shields.io/badge/TensorFlow-FF6F00?style=flat&logo=tensorflow&logoColor=white) | Model building & training      |
+| ![Keras](https://img.shields.io/badge/Keras-D00000?style=flat&logo=keras&logoColor=white)                | High-level neural network API  |
+| ![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=flat&logo=opencv&logoColor=white)             | Image decoding & preprocessing |
+| ![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat&logo=numpy&logoColor=white)                | Array operations               |
+| ![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=flat)                                 | Training curve visualization   |
+| `msgpack`                                                                                                | Reading `.msg` shard files     |
+| `scikit-learn`                                                                                           | Train/test split               |
+| ![Kaggle](https://img.shields.io/badge/Kaggle-20BEFF?style=flat&logo=kaggle&logoColor=white)             | Dataset & compute platform     |
 
 **Author**
 
