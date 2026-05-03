@@ -1,4 +1,4 @@
-# GeoVision — Image-Based Geo-Location Predictor
+# 🌍📍GeoVision — Image-Based Geo-Location Predictor
 A deep learning model that predicts the 'latitude and longitude' of any image using a CNN inspired by the legendary AlexNet architecture.
 
 ### What This Project Does
