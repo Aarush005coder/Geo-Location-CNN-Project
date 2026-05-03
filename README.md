@@ -18,7 +18,7 @@ It is a 'regression problem', not classification. Instead of predicting a catego
 ## Model Architecture — AlexNet Inspired
 This project draws direct inspiration from 'AlexNet (Krizhevsky et al., 2012)' — the landmark CNN that won ImageNet 2012 and changed computer vision forever.
 
-# Side-by-Side Comparison
+### Side-by-Side Comparison
 |       Layer       |        AlexNet (Original)     |          GeoVision (This Project)       |
 |-------------------|-------------------------------|-----------------------------------------|
 | Conv Layer 1      | `Conv(96, 11×11, stride=4)`   | ✅ Identical                            |
@@ -39,7 +39,7 @@ AlexNet was built for 1000-class image classification. GeoVision adapts it for c
 - Normalizing coordinates to `[0, 1]` range to match sigmoid output
 - Using `GlobalAveragePooling2D` instead of Flatten to reduce parameters
 
-## Architecture Diagram
+### Architecture Diagram
                                                                     Input (128×128×3)
                                                                             │
                                                                     ┌───────▼────────┐
