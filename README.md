@@ -143,7 +143,6 @@ ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3)
 | 12    | 0.00025       | ReduceLROnPlateau triggered again |
 
 **Results**
-
 **Training Log (Sample)**
 
 | Epoch | Train Loss | Val Loss | Train MAE | Val MAE |
@@ -175,19 +174,6 @@ Val MAE ≈ 0.14 on normalized scale
 | Train separate models for lat and lon                 | Decouple coordinate prediction                          |
 | Build a web app with map visualization                | Show predicted location on an interactive map           |
 
-**Tech Stack**
-|       Tool     |             Purpose            |
-|----------------|--------------------------------|
-| Python         | Core language                  |
-| TensorFlow     | Model building & training      |
-| Keras          | High-level neural network API  |
-| OpenCV         | Image decoding & preprocessing |
-| NumPy          | Array operations               |
-| Matplotlib     | Training curve visualization   |
-| msgpack        | Reading `.msg` shard files     |
-| scikit-learn   | Train/test split               |
-| Kaggle         | Dataset & compute platform     |
-
 **Folder Structure**
 ```
 GeoVision/
@@ -218,7 +204,7 @@ GeoVision/
 
 **Author**
 
-**Aarush Khandelwal**
+**Developed By Aarush Khandelwal**
 
 Linkedin - (https://www.linkedin.com/in/aarush-khandelwal-1b99a7320/)
 Github - (https://github.com/Aarush005coder)
